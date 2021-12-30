@@ -13,6 +13,5 @@ public class OCRTests {
 
     @Test
     public void testOCR() {
-        return;
     }
 }
