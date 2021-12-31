@@ -1,5 +1,6 @@
 package cn.moyunying.assistant;
 
+import cn.moyunying.assistant.utils.OCRUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,5 +14,8 @@ public class OCRTests {
 
     @Test
     public void testOCR() {
+        String path = "C:\\Users\\17439\\Downloads\\test.jpg";
+        String languageType = "JAP";
+        System.out.println(OCRUtil.getContent(path, languageType));
     }
 }
