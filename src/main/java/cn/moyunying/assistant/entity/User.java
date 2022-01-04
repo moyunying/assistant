@@ -8,10 +8,10 @@ public class User {
     private String username;
     private String password;
     private String salt;
-    private int balance;
     private int type;
     private String headerUrl;
     private Date createTime;
+    private Date expireTime;
 
     public int getId() {
         return id;
@@ -45,14 +45,6 @@ public class User {
         this.salt = salt;
     }
 
-    public int getBalance() {
-        return balance;
-    }
-
-    public void setBalance(int balance) {
-        this.balance = balance;
-    }
-
     public int getType() {
         return type;
     }
@@ -77,6 +69,14 @@ public class User {
         this.createTime = createTime;
     }
 
+    public Date getExpireTime() {
+        return expireTime;
+    }
+
+    public void setExpireTime(Date expireTime) {
+        this.expireTime = expireTime;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -84,10 +84,10 @@ public class User {
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", salt='" + salt + '\'' +
-                ", balance=" + balance +
                 ", type=" + type +
                 ", headerUrl='" + headerUrl + '\'' +
                 ", createTime=" + createTime +
+                ", expireTime=" + expireTime +
                 '}';
     }
 }
