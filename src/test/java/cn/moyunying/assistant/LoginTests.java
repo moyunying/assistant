@@ -8,6 +8,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ContextConfiguration(classes = AssistantApplication.class)
@@ -18,17 +21,11 @@ public class LoginTests {
 
     @Test
     public void testRegister() {
-        String username = "";
-        String password = "";
-        System.out.println(loginController.register(username, password));
-
-        username = "lisi";
-        System.out.println(loginController.register(username, password));
-
-        password = "12345678";
-        System.out.println(loginController.register(username, password));
-
-        username = "zhangsan";
-        System.out.println(loginController.register(username, password));
+        Map<String, Object> data = new HashMap<>();
+        String username = "zhangsan";
+        String password = "123456";
+        data.put("username", username);
+        data.put("password", password);
+        System.out.println(loginController.register(data));
     }
 }
