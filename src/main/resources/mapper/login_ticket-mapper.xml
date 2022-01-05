@@ -8,6 +8,10 @@
         user_id, cookie, status, expire_time
     </sql>
 
+    <sql id="selectFields">
+        id, user_id, cookie, status, expire_time
+    </sql>
+
     <insert id="insertLoginTicket" parameterType="LoginTicket" keyProperty="id">
         insert into login_ticket(<include refid="insertFields"></include>)
         values(#{userId}, #{cookie}, #{status}, #{expireTime})
@@ -18,5 +22,11 @@
         set status = #{status}
         where cookie = #{cookie}
     </update>
+    
+    <select id="selectLoginTicket" resultType="LoginTicket">
+        select <include refid="selectFields"></include>
+        from login_ticket
+        where cookie = #{cookie}
+    </select>
 
 </mapper>

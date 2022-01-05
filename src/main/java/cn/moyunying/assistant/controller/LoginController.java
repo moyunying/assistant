@@ -33,4 +33,17 @@ public class LoginController {
     public Map<String, Object> logout(@RequestParam String cookie) {
         return userService.logout(cookie);
     }
+
+    @RequestMapping(path = "/changePassword", method = RequestMethod.POST)
+    public Map<String, Object> changePassword(@RequestParam String cookie,
+                                              @RequestParam String password) {
+        return userService.changePassword(cookie, password);
+    }
+
+    @RequestMapping(path = "/changeHeader", method = RequestMethod.POST)
+    public Map<String, Object> changeHeader(@RequestParam String cookie,
+                                            @RequestParam String format,
+                                            @RequestParam String base64) {
+        return userService.changeHeader(cookie, format, base64);
+    }
 }

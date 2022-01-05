@@ -6,6 +6,7 @@ import cn.moyunying.assistant.entity.LoginTicket;
 import cn.moyunying.assistant.entity.User;
 import cn.moyunying.assistant.util.AssistantConstant;
 import cn.moyunying.assistant.util.AssistantUtil;
+import cn.moyunying.assistant.util.UploadUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -121,5 +122,59 @@ public class UserService implements AssistantConstant {
         map.put("code", 0);
         map.put("msg", "退出成功！");
         return map;
+    }
+
+    public Map<String, Object> changePassword(String cookie, String password) {
+        Map<String, Object> map = new HashMap<>();
+
+        LoginTicket loginTicket = isOnline(cookie);
+        if (loginTicket == null) {
+            map.put("code", 1);
+            map.put("msg", "没有登录！");
+            return map;
+        }
+
+        User user = userMapper.selectById(loginTicket.getUserId());
+        password = AssistantUtil.md5(password + user.getSalt());
+        userMapper.updatePassword(user.getId(), password);
+        loginTicketMapper.updateStatus(cookie, 1);
+
+        map.put("code", 0);
+        map.put("msg", "修改密码成功！");
+        return map;
+    }
+
+    public Map<String, Object> changeHeader(String cookie, String format, String base64) {
+        Map<String, Object> map = new HashMap<>();
+
+        LoginTicket loginTicket = isOnline(cookie);
+        if (loginTicket == null) {
+            map.put("code", 1);
+            map.put("msg", "没有登录！");
+            return map;
+        }
+
+        String key = AssistantUtil.generateUUID() + "." + format;
+        String headerUrl = UploadUtil.put64image(key, base64);
+        if (headerUrl == null) {
+            map.put("code", 1);
+            map.put("msg", "上传失败！");
+            return map;
+        }
+
+        userMapper.updateHeaderUrl(loginTicket.getUserId(), headerUrl);
+
+        map.put("code", 0);
+        map.put("msg", "上传成功！");
+        return map;
+    }
+
+    public LoginTicket isOnline(String cookie) {
+        LoginTicket loginTicket = loginTicketMapper.selectLoginTicket(cookie);
+        if (loginTicket.getExpireTime().before(new Date())) {
+            loginTicketMapper.updateStatus(cookie, 1);
+            return null;
+        }
+        return loginTicket;
     }
 }

@@ -9,4 +9,6 @@ public interface LoginTicketMapper {
     int insertLoginTicket(LoginTicket loginTicket);
 
     int updateStatus(String cookie, int status);
+
+    LoginTicket selectLoginTicket(String cookie);
 }

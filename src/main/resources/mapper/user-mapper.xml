@@ -12,6 +12,12 @@
         username, password, salt, type, header_url, create_time, expire_time
     </sql>
 
+    <select id="selectById" resultType="User">
+        select <include refid="selectFields"></include>
+        from user
+        where id = #{id}
+    </select>
+
     <select id="selectByName" resultType="User">
         select <include refid="selectFields"></include>
         from user
@@ -26,6 +32,18 @@
     <update id="updateType">
         update user
         set type = #{type}
+        where id = #{id}
+    </update>
+
+    <update id="updatePassword">
+        update user
+        set password = #{password}
+        where id = #{id}
+    </update>
+
+    <update id="updateHeaderUrl">
+        update user
+        set header_url = #{headerUrl}
         where id = #{id}
     </update>
 
