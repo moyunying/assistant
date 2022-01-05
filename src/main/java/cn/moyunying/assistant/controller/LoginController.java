@@ -1,12 +1,8 @@
 package cn.moyunying.assistant.controller;
 
-import cn.moyunying.assistant.entity.User;
 import cn.moyunying.assistant.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -22,10 +18,19 @@ public class LoginController {
     }
 
     @RequestMapping(path = "/register", method = RequestMethod.POST)
-    public Map<String, Object> register(@RequestBody Map<String, Object> data) {
-        User user = new User();
-        user.setUsername((String) data.get("username"));
-        user.setPassword((String) data.get("password"));
-        return userService.register(user);
+    public Map<String, Object> register(@RequestParam String username,
+                                        @RequestParam String password) {
+        return userService.register(username, password);
+    }
+
+    @RequestMapping(path = "/login", method = RequestMethod.POST)
+    public Map<String, Object> login(@RequestParam String username,
+                                     @RequestParam String password) {
+        return userService.login(username, password);
+    }
+
+    @RequestMapping(path = "/logout", method = RequestMethod.POST)
+    public Map<String, Object> logout(@RequestParam String cookie) {
+        return userService.logout(cookie);
     }
 }

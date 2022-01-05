@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.moyunying.assistant.dao.LoginTicketMapper">
+
+    <sql id="insertFields">
+        user_id, cookie, status, expire_time
+    </sql>
+
+    <insert id="insertLoginTicket" parameterType="LoginTicket" keyProperty="id">
+        insert into login_ticket(<include refid="insertFields"></include>)
+        values(#{userId}, #{cookie}, #{status}, #{expireTime})
+    </insert>
+
+    <update id="updateStatus">
+        update login_ticket
+        set status = #{status}
+        where cookie = #{cookie}
+    </update>
+
+</mapper>

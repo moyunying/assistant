@@ -8,7 +8,7 @@ public class User {
     private String username;
     private String password;
     private String salt;
-    private int type;
+    private int type;  // 0-普通用户; 1-会员; 2-管理员;
     private String headerUrl;
     private Date createTime;
     private Date expireTime;
