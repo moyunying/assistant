@@ -18,32 +18,22 @@ public class LoginController {
     }
 
     @RequestMapping(path = "/register", method = RequestMethod.POST)
-    public Map<String, Object> register(@RequestParam String username,
-                                        @RequestParam String password) {
+    public Map<String, Object> register(@RequestBody Map<String, Object> data) {
+        String username = (String) data.get("username");
+        String password = (String) data.get("password");
         return userService.register(username, password);
     }
 
     @RequestMapping(path = "/login", method = RequestMethod.POST)
-    public Map<String, Object> login(@RequestParam String username,
-                                     @RequestParam String password) {
+    public Map<String, Object> login(@RequestBody Map<String, Object> data) {
+        String username = (String) data.get("username");
+        String password = (String) data.get("password");
         return userService.login(username, password);
     }
 
     @RequestMapping(path = "/logout", method = RequestMethod.POST)
-    public Map<String, Object> logout(@RequestParam String cookie) {
+    public Map<String, Object> logout(@RequestBody Map<String, Object> data) {
+        String cookie = (String) data.get("cookie");
         return userService.logout(cookie);
-    }
-
-    @RequestMapping(path = "/changePassword", method = RequestMethod.POST)
-    public Map<String, Object> changePassword(@RequestParam String cookie,
-                                              @RequestParam String password) {
-        return userService.changePassword(cookie, password);
-    }
-
-    @RequestMapping(path = "/changeHeader", method = RequestMethod.POST)
-    public Map<String, Object> changeHeader(@RequestParam String cookie,
-                                            @RequestParam String format,
-                                            @RequestParam String base64) {
-        return userService.changeHeader(cookie, format, base64);
     }
 }

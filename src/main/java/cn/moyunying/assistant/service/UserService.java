@@ -94,7 +94,8 @@ public class UserService implements AssistantConstant {
 
         //检查会员是否到期
         if (user.getExpireTime().before(new Date())) {
-            userMapper.updateType(user.getId(), 0);
+            user.setType(0);
+            userMapper.updateType(user.getId(), user.getType());
         }
 
         // 生成登录凭证
@@ -111,6 +112,7 @@ public class UserService implements AssistantConstant {
         map.put("username", user.getUsername());
         map.put("type", user.getType());
         map.put("headerUrl", user.getHeaderUrl());
+        map.put("expireTime", user.getExpireTime());
         return map;
     }
 
@@ -121,6 +123,29 @@ public class UserService implements AssistantConstant {
 
         map.put("code", 0);
         map.put("msg", "退出成功！");
+        return map;
+    }
+
+    //个人主页
+    public Map<String, Object> myHome(String cookie){
+        Map<String, Object> map = new HashMap<>();
+
+        LoginTicket loginTicket = isOnline(cookie);
+        if (loginTicket == null) {
+            map.put("code", 1);
+            map.put("msg", "没有登录！");
+            return map;
+        }
+
+        loginTicket = loginTicketMapper.selectLoginTicket(cookie);
+        User user = userMapper.selectById(loginTicket.getId());
+
+        map.put("code", 0);
+        map.put("msg", "个人主页获取成功！");
+        map.put("username", user.getUsername());
+        map.put("type", user.getType());
+        map.put("headerUrl", user.getHeaderUrl());
+        map.put("expireTime",user.getExpireTime());
         return map;
     }
 
@@ -166,15 +191,22 @@ public class UserService implements AssistantConstant {
 
         map.put("code", 0);
         map.put("msg", "上传成功！");
+        map.put("headerUrl", headerUrl);
         return map;
     }
 
     public LoginTicket isOnline(String cookie) {
         LoginTicket loginTicket = loginTicketMapper.selectLoginTicket(cookie);
+
+        if (loginTicket == null || loginTicket.getStatus() == 1) {
+            return null;
+        }
+
         if (loginTicket.getExpireTime().before(new Date())) {
             loginTicketMapper.updateStatus(cookie, 1);
             return null;
         }
+
         return loginTicket;
     }
 }
