@@ -2,10 +2,7 @@ package cn.moyunying.assistant.controller;
 
 import cn.moyunying.assistant.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -29,5 +26,10 @@ public class PostController {
         String title = (String) data.get("title");
         String content = (String) data.get("content");
         return postService.share(cookie, title, content);
+    }
+
+    @RequestMapping(path = "/getPosts", method = RequestMethod.GET)
+    public Map<String, Object> getPosts(@RequestParam int page) {
+        return postService.getPosts(page);
     }
 }

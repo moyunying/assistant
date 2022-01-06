@@ -13,8 +13,20 @@
     </sql>
 
     <insert id="insertPost" parameterType="Post" keyProperty="id">
-        insert into user(<include refid="insertFields"></include>)
+        insert into post(<include refid="insertFields"></include>)
         values(#{userId}, #{title}, #{content}, #{createTime})
     </insert>
+
+    <select id="selectPosts" resultType="Post">
+        select <include refid="selectFields"></include>
+        from post
+        order by create_time desc
+        limit #{offset}, #{limit}
+    </select>
+
+    <select id="selectTotal" resultType="int">
+        select count(*)
+        from post
+    </select>
 
 </mapper>

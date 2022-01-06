@@ -1,16 +1,17 @@
 package cn.moyunying.assistant.service;
 
 import cn.moyunying.assistant.dao.PostMapper;
+import cn.moyunying.assistant.dao.UserMapper;
 import cn.moyunying.assistant.entity.LoginTicket;
 import cn.moyunying.assistant.entity.Post;
+import cn.moyunying.assistant.entity.User;
+import cn.moyunying.assistant.entity.vo.PostVo;
 import cn.moyunying.assistant.util.AssistantUtil;
 import cn.moyunying.assistant.util.UploadUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class PostService {
@@ -20,6 +21,9 @@ public class PostService {
 
     @Autowired
     private PostMapper postMapper;
+
+    @Autowired
+    private UserMapper userMapper;
 
     public Map<String, Object> upload(String cookie, String format, String base64) {
         Map<String, Object> map = new HashMap<>();
@@ -64,6 +68,36 @@ public class PostService {
 
         map.put("code", 0);
         map.put("msg", "分享成功！");
+        return map;
+    }
+
+    public Map<String, Object> getPosts(int page) {
+        Map<String, Object> map = new HashMap<>();
+
+        int limit = 10;
+        int offset = (page - 1) * limit;
+        map.put("page", page);
+        map.put("total", postMapper.selectTotal() / limit + 1);
+        List<Post> list = postMapper.selectPosts(offset, limit);
+
+        List<PostVo> posts = null;
+        if (list != null) {
+            posts = new ArrayList<>();
+            for (Post post : list) {
+                PostVo postVo = new PostVo();
+                User user = userMapper.selectById(post.getUserId());
+                postVo.setUsername(user.getUsername());
+                postVo.setHeaderUrl(user.getHeaderUrl());
+                postVo.setTitle(post.getTitle());
+                postVo.setContent(post.getContent());
+                postVo.setCreateTime(post.getCreateTime());
+                posts.add(postVo);
+            }
+        }
+        map.put("posts", posts);
+
+        map.put("code", 0);
+        map.put("msg", "获取帖子列表成功！");
         return map;
     }
 }
