@@ -5,7 +5,7 @@
 <mapper namespace="cn.moyunying.assistant.dao.UserMapper">
 
     <sql id="selectFields">
-        id, username, password, salt, type, header_url, create_time, expire_time
+        user.id, username, password, salt, type, header_url, user.create_time, expire_time
     </sql>
 
     <sql id="insertFields">
@@ -46,5 +46,14 @@
         set header_url = #{headerUrl}
         where id = #{id}
     </update>
+    
+    <select id="selectPopularUsers" resultType="User">
+        select <include refid="selectFields"></include>
+        from user, post
+        where user.id = user_id
+        group by user_id
+        order by count(user_id) desc
+        limit #{offset}, #{limit}
+    </select>
 
 </mapper>

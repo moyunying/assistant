@@ -14,7 +14,8 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
-public class UserService implements AssistantConstant {
+public class
+UserService implements AssistantConstant {
 
     @Autowired
     private UserMapper userMapper;
@@ -98,13 +99,15 @@ public class UserService implements AssistantConstant {
             userMapper.updateType(user.getId(), user.getType());
         }
 
-        // 生成登录凭证
-        LoginTicket loginTicket = new LoginTicket();
-        loginTicket.setUserId(user.getId());
-        loginTicket.setCookie(AssistantUtil.generateUUID());
-        loginTicket.setStatus(0);
-        loginTicket.setExpireTime(new Date(System.currentTimeMillis() + LOGIN_EXPIRE_SECONDS * 1000L));
-        loginTicketMapper.insertLoginTicket(loginTicket);
+        LoginTicket loginTicket = loginTicketMapper.selectLoginTicketByUserId(user.getId());
+        if (loginTicket == null) {
+            loginTicket = new LoginTicket();
+            loginTicket.setUserId(user.getId());
+            loginTicket.setCookie(AssistantUtil.generateUUID());
+            loginTicket.setStatus(0);
+            loginTicket.setExpireTime(new Date(System.currentTimeMillis() + LOGIN_EXPIRE_SECONDS * 1000));
+            loginTicketMapper.insertLoginTicket(loginTicket);
+        }
 
         map.put("code", 0);
         map.put("msg", "登录成功！");
@@ -118,6 +121,13 @@ public class UserService implements AssistantConstant {
 
     public Map<String, Object> logout(String cookie) {
         Map<String, Object> map = new HashMap<>();
+
+        LoginTicket loginTicket = isOnline(cookie);
+        if (loginTicket == null) {
+            map.put("code", 1);
+            map.put("msg", "没有登录！");
+            return map;
+        }
 
         loginTicketMapper.updateStatus(cookie, 1);
 
@@ -137,8 +147,7 @@ public class UserService implements AssistantConstant {
             return map;
         }
 
-        loginTicket = loginTicketMapper.selectLoginTicket(cookie);
-        User user = userMapper.selectById(loginTicket.getId());
+        User user = userMapper.selectById(loginTicket.getUserId());
 
         map.put("code", 0);
         map.put("msg", "个人主页获取成功！");
@@ -196,9 +205,9 @@ public class UserService implements AssistantConstant {
     }
 
     public LoginTicket isOnline(String cookie) {
-        LoginTicket loginTicket = loginTicketMapper.selectLoginTicket(cookie);
+        LoginTicket loginTicket = loginTicketMapper.selectLoginTicketByCookie(cookie);
 
-        if (loginTicket == null || loginTicket.getStatus() == 1) {
+        if (loginTicket == null) {
             return null;
         }
 
@@ -208,5 +217,31 @@ public class UserService implements AssistantConstant {
         }
 
         return loginTicket;
+    }
+
+    public Map<String, Object> getPopularUsers(int offset, int limit) {
+        Map<String, Object> map = new HashMap<>();
+
+        List<User> list = userMapper.selectPopularUsers(offset, limit);
+
+        if (list == null) {
+            map.put("code", 1);
+            map.put("msg", "获取热门用户失败！");
+            return map;
+        }
+
+        List<Map<String, Object>> users = new ArrayList<>();
+        for (User user : list) {
+            Map<String, Object> userInfo = new HashMap<>();
+            userInfo.put("id", user.getId());
+            userInfo.put("username", user.getUsername());
+            userInfo.put("headerUrl", user.getHeaderUrl());
+            users.add(userInfo);
+        }
+        map.put("users", users);
+
+        map.put("code", 0);
+        map.put("msg", "获取热门用户成功！");
+        return map;
     }
 }

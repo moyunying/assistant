@@ -23,10 +23,16 @@
         where cookie = #{cookie}
     </update>
     
-    <select id="selectLoginTicket" resultType="LoginTicket">
+    <select id="selectLoginTicketByCookie" resultType="LoginTicket">
         select <include refid="selectFields"></include>
         from login_ticket
-        where cookie = #{cookie}
+        where cookie = #{cookie} and status = 0
+    </select>
+
+    <select id="selectLoginTicketByUserId" resultType="LoginTicket">
+        select <include refid="selectFields"></include>
+        from login_ticket
+        where user_id = #{userId} and status = 0
     </select>
 
 </mapper>
