@@ -10,5 +10,7 @@ public interface LoginTicketMapper {
 
     int updateStatus(String cookie, int status);
 
-    LoginTicket selectLoginTicket(String cookie);
+    LoginTicket selectLoginTicketByCookie(String cookie);
+
+    LoginTicket selectLoginTicketByUserId(int userId);
 }

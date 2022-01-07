@@ -2,10 +2,7 @@ package cn.moyunying.assistant.controller;
 
 import cn.moyunying.assistant.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -34,5 +31,11 @@ public class UserController {
         String format = (String) data.get("format");
         String base64 = (String) data.get("base64");
         return userService.changeHeader(cookie, format, base64);
+    }
+
+    @RequestMapping(path = "/getPopularUsers", method = RequestMethod.GET)
+    public Map<String, Object> getPosts(@RequestParam int offset,
+                                        @RequestParam int limit) {
+        return userService.getPopularUsers(offset, limit);
     }
 }

@@ -12,14 +12,6 @@ public class PostController {
     @Autowired
     private PostService postService;
 
-    @RequestMapping(path = "/upload", method = RequestMethod.POST)
-    public Map<String, Object> upload(@RequestBody Map<String, Object> data) {
-        String cookie = (String) data.get("cookie");
-        String format = (String) data.get("format");
-        String base64 = (String) data.get("base64");
-        return postService.upload(cookie, format, base64);
-    }
-
     @RequestMapping(path = "/share", method = RequestMethod.POST)
     public Map<String, Object> share(@RequestBody Map<String, Object> data) {
         String cookie = (String) data.get("cookie");

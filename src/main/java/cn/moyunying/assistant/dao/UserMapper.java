@@ -3,6 +3,8 @@ package cn.moyunying.assistant.dao;
 import cn.moyunying.assistant.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 @Mapper
 public interface UserMapper {
 
@@ -17,4 +19,6 @@ public interface UserMapper {
     int updatePassword(int id, String password);
 
     int updateHeaderUrl(int id, String headerUrl);
+
+    List<User> selectPopularUsers(int offset, int limit);
 }
