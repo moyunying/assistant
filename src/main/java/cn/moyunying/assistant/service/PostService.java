@@ -80,11 +80,10 @@ public class PostService {
     public Map<String, Object> getUserPosts(int userId,int page) {
         Map<String, Object> map = new HashMap<>();
 
-
         int limit = 10;
         int offset = (page - 1) * limit;
 
-        List<Post> p = postMapper.selectPostByid(userId,offset, limit);
+        List<Post> p = postMapper.selectPostByid(userId, offset, limit);
 
         //用户未发帖
         if (p == null || page>(postMapper.selectTotal(userId) / limit + 1)) {
