@@ -27,6 +27,17 @@
     <select id="selectTotal" resultType="int">
         select count(*)
         from post
+        where true
+        <if test="userId != 0">
+            and user_id =#{userId}
+        </if>
     </select>
 
+    <select id="selectPostByid" resultType="Post">
+        select <include refid="selectFields"></include>
+        from post
+        where user_id =#{userId}
+        order by create_time desc
+        limit #{offset}, #{limit}
+    </select>
 </mapper>

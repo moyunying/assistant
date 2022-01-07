@@ -32,4 +32,10 @@ public class PostController {
     public Map<String, Object> getPosts(@RequestParam int page) {
         return postService.getPosts(page);
     }
+
+
+    @RequestMapping(path = "/getUserPosts", method = RequestMethod.GET)
+    public Map<String, Object> getUserPosts(@RequestParam int userId,int page) {
+        return postService.getUserPosts(userId, page);
+    }
 }
