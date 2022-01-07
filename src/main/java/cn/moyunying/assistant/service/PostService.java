@@ -70,7 +70,45 @@ public class PostService {
         }
         map.put("posts", posts);
         map.put("page", page);
-        map.put("total", postMapper.selectTotal() / limit + 1);
+        map.put("total", postMapper.selectTotal(0) / limit + 1);
+
+        map.put("code", 0);
+        map.put("msg", "获取帖子列表成功！");
+        return map;
+    }
+
+    public Map<String, Object> getUserPosts(int userId,int page) {
+        Map<String, Object> map = new HashMap<>();
+
+
+        int limit = 10;
+        int offset = (page - 1) * limit;
+
+        List<Post> p = postMapper.selectPostByid(userId,offset, limit);
+
+        //用户未发帖
+        if (p == null || page>(postMapper.selectTotal(userId) / limit + 1)) {
+            map.put("code", 1);
+            map.put("msg", "获取帖子列表失败！");
+            return map;
+        }
+
+        map.put("page", page);
+        map.put("total", postMapper.selectTotal(userId) / limit + 1);
+
+        List<Map<String,Object>> posts = new ArrayList<>();
+        for(Post post : p)
+        {
+            Map<String,Object> postvo = new HashMap<>();
+            User user = userMapper.selectById(post.getUserId());
+            postvo.put("username",user.getUsername());
+            postvo.put("headerUrl",user.getHeaderUrl());
+            postvo.put("title",post.getTitle());
+            postvo.put("content",post.getContent());
+            postvo.put("createtime",post.getCreateTime());
+            posts.add(postvo);
+        }
+        map.put("posts", posts);
 
         map.put("code", 0);
         map.put("msg", "获取帖子列表成功！");
