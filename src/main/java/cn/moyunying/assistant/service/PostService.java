@@ -84,7 +84,7 @@ public class PostService {
         int limit = 10;
         int offset = (page - 1) * limit;
 
-        List<Post> p = postMapper.selectPostByid(userId,offset, limit);
+        List<Post> p = postMapper.selectPostByUserId(userId,offset, limit);
 
         //用户未发帖
         if (p == null || page>(postMapper.selectTotal(userId) / limit + 1)) {
