@@ -33,7 +33,7 @@
         </if>
     </select>
 
-    <select id="selectPostByid" resultType="Post">
+    <select id="selectPostByUserId" resultType="Post">
         select <include refid="selectFields"></include>
         from post
         where user_id =#{userId}

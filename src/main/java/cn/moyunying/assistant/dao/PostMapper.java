@@ -14,5 +14,5 @@ public interface PostMapper {
 
     int selectTotal(int userId);
 
-    List<Post> selectPostByid(int userId,int offset, int limit);
+    List<Post> selectPostByUserId(int userId,int offset, int limit);
 }
