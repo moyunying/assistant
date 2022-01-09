@@ -33,11 +33,12 @@
         </if>
     </select>
 
-    <select id="selectPostByUserId" resultType="Post">
+    <select id="selectPostsByUserId" resultType="Post">
         select <include refid="selectFields"></include>
         from post
-        where user_id =#{userId}
+        where user_id = #{userId}
         order by create_time desc
         limit #{offset}, #{limit}
     </select>
+
 </mapper>

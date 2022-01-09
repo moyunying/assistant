@@ -27,7 +27,7 @@ public class PostController {
 
 
     @RequestMapping(path = "/getUserPosts", method = RequestMethod.GET)
-    public Map<String, Object> getUserPosts(@RequestParam int userId, int page) {
+    public Map<String, Object> getUserPosts(@RequestParam int userId, @RequestParam int page) {
         return postService.getUserPosts(userId, page);
     }
 }

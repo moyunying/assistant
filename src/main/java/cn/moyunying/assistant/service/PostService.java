@@ -51,7 +51,7 @@ public class PostService {
         int offset = (page - 1) * limit;
         List<Post> list = postMapper.selectPosts(offset, limit);
 
-        if (list == null) {
+        if (list.isEmpty()) {
             map.put("code", 1);
             map.put("msg", "获取帖子列表失败！");
             return map;
@@ -77,37 +77,34 @@ public class PostService {
         return map;
     }
 
-    public Map<String, Object> getUserPosts(int userId,int page) {
+    public Map<String, Object> getUserPosts(int userId, int page) {
         Map<String, Object> map = new HashMap<>();
 
         int limit = 10;
         int offset = (page - 1) * limit;
-
-        List<Post> p = postMapper.selectPostByUserId(userId, offset, limit);
+        List<Post> list = postMapper.selectPostsByUserId(userId, offset, limit);
 
         //用户未发帖
-        if (p == null || page>(postMapper.selectTotal(userId) / limit + 1)) {
+        if (list.isEmpty()) {
             map.put("code", 1);
             map.put("msg", "获取帖子列表失败！");
             return map;
         }
 
-        map.put("page", page);
-        map.put("total", postMapper.selectTotal(userId) / limit + 1);
-
-        List<Map<String,Object>> posts = new ArrayList<>();
-        for(Post post : p)
-        {
-            Map<String,Object> postvo = new HashMap<>();
+        List<Map<String, Object>> posts = new ArrayList<>();
+        for (Post post : list) {
+            Map<String, Object> postInfo = new HashMap<>();
             User user = userMapper.selectById(post.getUserId());
-            postvo.put("username",user.getUsername());
-            postvo.put("headerUrl",user.getHeaderUrl());
-            postvo.put("title",post.getTitle());
-            postvo.put("content",post.getContent());
-            postvo.put("createtime",post.getCreateTime());
-            posts.add(postvo);
+            postInfo.put("username", user.getUsername());
+            postInfo.put("headerUrl", user.getHeaderUrl());
+            postInfo.put("title", post.getTitle());
+            postInfo.put("content", post.getContent());
+            postInfo.put("creatTime", post.getCreateTime());
+            posts.add(postInfo);
         }
         map.put("posts", posts);
+        map.put("page", page);
+        map.put("total", postMapper.selectTotal(userId) / limit + 1);
 
         map.put("code", 0);
         map.put("msg", "获取帖子列表成功！");

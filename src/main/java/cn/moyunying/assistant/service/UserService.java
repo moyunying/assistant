@@ -14,8 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
-public class
-UserService implements AssistantConstant {
+public class UserService implements AssistantConstant {
 
     @Autowired
     private UserMapper userMapper;
@@ -224,7 +223,7 @@ UserService implements AssistantConstant {
 
         List<User> list = userMapper.selectPopularUsers(offset, limit);
 
-        if (list == null) {
+        if (list.isEmpty()) {
             map.put("code", 1);
             map.put("msg", "获取热门用户失败！");
             return map;
@@ -233,7 +232,7 @@ UserService implements AssistantConstant {
         List<Map<String, Object>> users = new ArrayList<>();
         for (User user : list) {
             Map<String, Object> userInfo = new HashMap<>();
-            userInfo.put("id", user.getId());
+            userInfo.put("userId", user.getId());
             userInfo.put("username", user.getUsername());
             userInfo.put("headerUrl", user.getHeaderUrl());
             users.add(userInfo);
