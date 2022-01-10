@@ -150,6 +150,7 @@ public class UserService implements AssistantConstant {
 
         map.put("code", 0);
         map.put("msg", "个人主页获取成功！");
+        map.put("userId",loginTicket.getUserId());
         map.put("userId", user.getId());
         map.put("username", user.getUsername());
         map.put("type", user.getType());
@@ -242,6 +243,43 @@ public class UserService implements AssistantConstant {
 
         map.put("code", 0);
         map.put("msg", "获取热门用户成功！");
+        return map;
+    }
+
+    //会员充值续费功能
+    public Map<String, Object> recharge(String cookie, int expireMonths) {
+        Map<String, Object> map = new HashMap<>();
+
+        LoginTicket loginTicket = isOnline(cookie);
+        if (loginTicket == null) {
+            map.put("code", 1);
+            map.put("msg", "没有登录！");
+            return map;
+        }
+
+        User user = userMapper.selectById(loginTicket.getUserId());
+
+        //会员未到期
+        if(user.getType()==1)
+        {
+            user.setExpireTime(new Date(user.getExpireTime().getTime() + expireMonths * RECHARGE_EXPIRE_SECONDS * 1000));
+            userMapper.updateExpireTime(user.getId(),user.getExpireTime());
+            map.put("code",0);
+            map.put("msg","充值成功！");
+            map.put("id",user.getId());
+            map.put("expireTime",user.getExpireTime());
+        }
+        //会员到期
+        else if(user.getType()==0)
+        {
+            user.setExpireTime(new Date(System.currentTimeMillis() + expireMonths * RECHARGE_EXPIRE_SECONDS * 1000));
+            userMapper.updateType(user.getId(),1);
+            userMapper.updateExpireTime(user.getId(),user.getExpireTime());
+            map.put("code",0);
+            map.put("msg","充值成功！");
+            map.put("id",user.getId());
+            map.put("expireTime",user.getExpireTime());
+        }
         return map;
     }
 }
