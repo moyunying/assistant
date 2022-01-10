@@ -13,11 +13,11 @@ import java.io.IOException;
 
 public class UploadUtil {
 
-    static String ak = "b28pnqLa69zIolzE7PtrolGhN_ujdza6bZIHj-hG";
-    static String sk = "HaC3gZUBOKIim-zQRMp8HiZfcbEdoSXKyaaaRzGq";  // 密钥配置
-    static Auth auth = Auth.create(ak, sk);
-    static String bucketname = "moyunying";  // 空间名
-    static String domain = "http://r58906tpn.hd-bkt.clouddn.com/";
+    private static final String ak = "b28pnqLa69zIolzE7PtrolGhN_ujdza6bZIHj-hG";
+    private static final String sk = "HaC3gZUBOKIim-zQRMp8HiZfcbEdoSXKyaaaRzGq";  // 密钥配置
+    private static final Auth auth = Auth.create(ak, sk);
+    private static final String bucketname = "moyunying";  // 空间名
+    private static final String domain = "http://r58906tpn.hd-bkt.clouddn.com/";
 
     public static String getUpToken() {
         return auth.uploadToken(bucketname, null, 3600, new StringMap().put("insertOnly", 1));
@@ -34,10 +34,8 @@ public class UploadUtil {
                 .build();
 
         OkHttpClient client = new OkHttpClient();
-        Response response = null;
-
         try {
-            response = client.newCall(request).execute();
+            Response response = client.newCall(request).execute();
             if (response.message().equals("OK")) {
                 return domain + key;
             } else {
