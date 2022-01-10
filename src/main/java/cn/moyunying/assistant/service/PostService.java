@@ -51,7 +51,7 @@ public class PostService {
         int offset = (page - 1) * limit;
         List<Post> list = postMapper.selectPosts(offset, limit);
 
-        if (list == null) {
+        if (list .isEmpty()) {
             map.put("code", 1);
             map.put("msg", "获取帖子列表失败！");
             return map;
