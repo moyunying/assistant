@@ -65,7 +65,7 @@ public class PostService {
             postInfo.put("headerUrl", user.getHeaderUrl());
             postInfo.put("title", post.getTitle());
             postInfo.put("content", post.getContent());
-            postInfo.put("creatTime", post.getCreateTime());
+            postInfo.put("createTime", post.getCreateTime());
             posts.add(postInfo);
         }
         map.put("posts", posts);
@@ -99,7 +99,7 @@ public class PostService {
             postInfo.put("headerUrl", user.getHeaderUrl());
             postInfo.put("title", post.getTitle());
             postInfo.put("content", post.getContent());
-            postInfo.put("creatTime", post.getCreateTime());
+            postInfo.put("createTime", post.getCreateTime());
             posts.add(postInfo);
         }
         map.put("posts", posts);

@@ -150,6 +150,7 @@ public class UserService implements AssistantConstant {
 
         map.put("code", 0);
         map.put("msg", "个人主页获取成功！");
+        map.put("userId", user.getId());
         map.put("username", user.getUsername());
         map.put("type", user.getType());
         map.put("headerUrl", user.getHeaderUrl());
