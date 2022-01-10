@@ -65,7 +65,7 @@ public class PostService {
             postInfo.put("headerUrl", user.getHeaderUrl());
             postInfo.put("title", post.getTitle());
             postInfo.put("content", post.getContent());
-            postInfo.put("creatTime", post.getCreateTime());
+            postInfo.put("createTime", post.getCreateTime());
             posts.add(postInfo);
         }
         map.put("posts", posts);
@@ -86,8 +86,8 @@ public class PostService {
 
         List<Post> p = postMapper.selectPostByUserId(userId,offset, limit);
 
-        //用户未发帖
-        if (p == null || page>(postMapper.selectTotal(userId) / limit + 1)) {
+        //用户未发帖或查询超出用户发帖量
+        if (p.isEmpty() || page>(postMapper.selectTotal(userId) / limit + 1)) {
             map.put("code", 1);
             map.put("msg", "获取帖子列表失败！");
             return map;
@@ -105,7 +105,7 @@ public class PostService {
             postvo.put("headerUrl",user.getHeaderUrl());
             postvo.put("title",post.getTitle());
             postvo.put("content",post.getContent());
-            postvo.put("createtime",post.getCreateTime());
+            postvo.put("createTime",post.getCreateTime());
             posts.add(postvo);
         }
         map.put("posts", posts);

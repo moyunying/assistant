@@ -34,8 +34,13 @@ public class UserController {
     }
 
     @RequestMapping(path = "/getPopularUsers", method = RequestMethod.GET)
-    public Map<String, Object> getPosts(@RequestParam int offset,
+    public Map<String, Object> getPopularUsers(@RequestParam int offset,
                                         @RequestParam int limit) {
         return userService.getPopularUsers(offset, limit);
+    }
+
+    @RequestMapping(path = "/recharge",method = RequestMethod.POST)
+    public Map<String, Object> rechage(@RequestParam String cookie,int expireMonths){
+        return userService.recharge(cookie,expireMonths);
     }
 }
