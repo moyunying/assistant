@@ -39,8 +39,9 @@ public class UserController {
     }
 
     @RequestMapping(path = "/recharge",method = RequestMethod.POST)
-    public Map<String, Object> recharge(@RequestParam String cookie,
-                                        @RequestParam int expireMonths) {
+    public Map<String, Object> recharge(@RequestBody Map<String, Object> data) {
+        String cookie = (String) data.get("cookie");
+        int expireMonths = (int) data.get("expireMonths");
         return userService.recharge(cookie, expireMonths);
     }
 }
