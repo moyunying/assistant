@@ -84,8 +84,7 @@ public class PostService {
         int offset = (page - 1) * limit;
         List<Post> list = postMapper.selectPostsByUserId(userId, offset, limit);
 
-        //用户未发帖
-        if (list.isEmpty() || page > (postMapper.selectTotal(userId) / limit + 1)) {
+        if (list.isEmpty()) {
             map.put("code", 1);
             map.put("msg", "获取帖子列表失败！");
             return map;
