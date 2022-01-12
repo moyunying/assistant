@@ -21,9 +21,11 @@ public interface AssistantConstant {
      * 汉语
      */
     String ZH = "zh";
+    String CN = "cn";
 
     /**
      * 日语
      */
     String JP = "jp";
+    String JA = "ja";
 }
