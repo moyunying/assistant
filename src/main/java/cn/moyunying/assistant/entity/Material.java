@@ -7,7 +7,6 @@ public class Material {
     private int id;
     private String title;
     private String content;
-    private int type;
     private Date createTime;
     private String keyword;
 
@@ -35,14 +34,6 @@ public class Material {
         this.content = content;
     }
 
-    public int getType() {
-        return type;
-    }
-
-    public void setType(int type) {
-        this.type = type;
-    }
-
     public Date getCreateTime() {
         return createTime;
     }
@@ -58,14 +49,15 @@ public class Material {
     public void setKeyword(String keyword) {
         this.keyword = keyword;
     }
+
     @Override
     public String toString() {
         return "Material{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", content='" + content + '\'' +
-                ", type=" + type +
                 ", createTime=" + createTime +
+                ", keyword='" + keyword + '\'' +
                 '}';
     }
 }
