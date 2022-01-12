@@ -9,6 +9,7 @@ public class Material {
     private String content;
     private int type;
     private Date createTime;
+    private String keyword;
 
     public int getId() {
         return id;
@@ -50,6 +51,13 @@ public class Material {
         this.createTime = createTime;
     }
 
+    public String getKeyword() {
+        return keyword;
+    }
+
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
+    }
     @Override
     public String toString() {
         return "Material{" +
