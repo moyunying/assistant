@@ -9,7 +9,7 @@ import java.util.List;
 public interface MaterialMapper {
     int insertMaterial(Material material);
 
-    List<Material> selectMaterialsByKeyword(String keyword, int offset, int limit);
+    List<Material> selectMaterials();
 
-    int selectTotalByKeyword(String keyword);
+    Material selectMaterialById(int id);
 }

@@ -7,8 +7,8 @@ public class Material {
     private int id;
     private String title;
     private String content;
+    private String pictureUrl;
     private Date createTime;
-    private String keyword;
 
     public int getId() {
         return id;
@@ -34,6 +34,14 @@ public class Material {
         this.content = content;
     }
 
+    public String getPictureUrl() {
+        return pictureUrl;
+    }
+
+    public void setPictureUrl(String pictureUrl) {
+        this.pictureUrl = pictureUrl;
+    }
+
     public Date getCreateTime() {
         return createTime;
     }
@@ -42,22 +50,14 @@ public class Material {
         this.createTime = createTime;
     }
 
-    public String getKeyword() {
-        return keyword;
-    }
-
-    public void setKeyword(String keyword) {
-        this.keyword = keyword;
-    }
-
     @Override
     public String toString() {
         return "Material{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", content='" + content + '\'' +
+                ", pictureUrl='" + pictureUrl + '\'' +
                 ", createTime=" + createTime +
-                ", keyword='" + keyword + '\'' +
                 '}';
     }
 }

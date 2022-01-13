@@ -6,9 +6,7 @@ import java.net.URI;
 import java.net.URLEncoder;
 import java.nio.ByteBuffer;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.CountDownLatch;
 
 import com.alibaba.fastjson.JSON;
@@ -44,7 +42,7 @@ public class AudioUtil {
 
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyy-MM-dd HH:mm:ss.SSS");
 
-    public static String audioTranslate(String fileName, String lang, String targetLang) throws Exception {
+    public static Map<String, Object> audioTranslate(String fileName, String lang, String targetLang) throws Exception {
         URI url = new URI(BASE_URL + getHandShakeParams(APPID, SECRET_KEY, lang, targetLang));
         DraftWithOrigin draft = new DraftWithOrigin(ORIGIN);
         CountDownLatch handshakeSuccess = new CountDownLatch(1);
@@ -137,7 +135,7 @@ public class AudioUtil {
 
         private CountDownLatch handshakeSuccess;
         private CountDownLatch connectClose;
-        private String result;
+        private Map<String, Object> result;
 
         public MyWebSocketClient(URI serverUri, Draft protocolDraft, CountDownLatch handshakeSuccess, CountDownLatch connectClose) {
             super(serverUri, protocolDraft);
@@ -152,6 +150,7 @@ public class AudioUtil {
 
         @Override
         public void onMessage(String msg) {
+            System.out.println(msg);
             JSONObject msgObj = JSON.parseObject(msg);
             String action = msgObj.getString("action");
             if (Objects.equals("started", action)) {
@@ -159,11 +158,16 @@ public class AudioUtil {
                 System.out.println(getCurrentTimeStr() + "\t握手成功！sid: " + msgObj.getString("sid"));
                 handshakeSuccess.countDown();
             } else if (Objects.equals("result", action)) {
-                String r = getContent(msgObj.getString("data"));
-                if (r != null) {
+                Map<String, Object> map = getContent(msgObj.getString("data"));
+                if (map.get("dst") != null && map.get("src") != null) {
                     // 转写结果
-                    System.out.println(getCurrentTimeStr() + "\tresult: " + r);
-                    result = r;
+                    System.out.println(getCurrentTimeStr() + "\tdst: " + map.get("dst") + "\tsrc: " + map.get("src"));
+                    if (result == null || ((String) map.get("src")).startsWith((String) result.get("src"))) {
+                        result = map;
+                    } else {
+                        result.put("dst", ((String) result.get("dst")) + ((String) map.get("dst")));
+                        result.put("src", ((String) result.get("src")) + ((String) map.get("src")));
+                    }
                 }
             } else if (Objects.equals("error", action)) {
                 // 连接发生错误
@@ -196,16 +200,16 @@ public class AudioUtil {
     }
 
     // 把转写结果解析为句子
-    public static String getContent(String message) {
-        String result = "";
+    public static Map<String, Object> getContent(String message) {
+        Map<String, Object> map = new HashMap<>();
         try {
             JSONObject messageObj = JSON.parseObject(message);
-            result = messageObj.getString("dst");
+            map.put("dst", messageObj.getString("dst"));
+            map.put("src", messageObj.getString("src"));
         } catch (Exception e) {
-            return message;
+            e.printStackTrace();
         }
-
-        return result;
+        return map;
     }
 
     @SuppressWarnings("deprecation")

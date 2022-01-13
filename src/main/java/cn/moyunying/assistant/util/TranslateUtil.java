@@ -83,8 +83,7 @@ public class TranslateUtil {
             if (response.body() != null) {
                 Map<String, Object> map = new HashMap<>();
                 JSONArray transResult = JSON.parseObject(response.body().string()).getJSONArray("trans_result");
-                String dst = transResult.getJSONObject(0).getString("dst");
-                return dst;
+                return transResult.getJSONObject(0).getString("dst");
             } else {
                 return null;
             }
