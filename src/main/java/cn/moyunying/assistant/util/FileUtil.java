@@ -4,6 +4,7 @@ import org.apache.commons.io.FileUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.IOException;
 
 public class FileUtil {
 
@@ -40,6 +41,36 @@ public class FileUtil {
         String cmd = ffmpeg + " -y -i " + sourcePath + " -acodec pcm_s16le -f s16le -ac 1 -ar 16000 " + targetPath;
 
         Runtime run = null;
+        try {
+            run = Runtime.getRuntime();
+            Process p = run.exec(cmd);
+
+            //释放进程
+            p.getOutputStream().close();
+            p.getInputStream().close();
+            p.getErrorStream().close();
+            p.waitFor();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            //run调用lame解码器最后释放内存
+            if (run != null) {
+                run.freeMemory();
+            }
+        }
+
+        return targetFileName;
+    }
+
+
+    public static String pcmToMp3(String sourceFileName) {
+        String targetFileName = sourceFileName.substring(0, sourceFileName.lastIndexOf(".")) + ".mp3";
+        String sourcePath = path + sourceFileName;
+        String targetPath = path + targetFileName;
+        String cmd = ffmpeg + " -y -f s16be -ac 2 -ar 16000 -acodec pcm_s16le -i " + sourcePath + " "+ targetPath;
+
+        Runtime run = null;
+        System.out.println(run);
         try {
             run = Runtime.getRuntime();
             Process p = run.exec(cmd);

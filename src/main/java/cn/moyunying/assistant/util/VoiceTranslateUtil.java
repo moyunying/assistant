@@ -1,28 +1,56 @@
 package cn.moyunying.assistant.util;
 
-
+import java.util.ArrayList;
 import com.iflytek.cloud.speech.*;
 
-import java.util.ArrayList;
-
 public class VoiceTranslateUtil {
-    private void Synthesize() {
+
+    private static final String APPID = "f0b9a7d9";
+
+    private static final String path = "D:\\audio\\";
+
+    public static String Synthesize(String text, int cc) {
+        SpeechUtility.createUtility("appid=" + APPID);
+
         SpeechSynthesizer speechSynthesizer = SpeechSynthesizer
                 .createSynthesizer();
-        // 设置发音人
-        speechSynthesizer.setParameter(SpeechConstant.VOICE_NAME, "xiaoyan");
 
-        //启用合成音频流事件，不需要时，不用设置此参数
-        speechSynthesizer.setParameter(SpeechConstant.TTS_BUFFER_EVENT, "1");
+        if(cc == 0){
+        // 设置发音人
+        speechSynthesizer.setParameter(SpeechConstant.VOICE_NAME, "x2_zhongcun");
+        //设置语速
+        speechSynthesizer.setParameter(SpeechConstant.SPEED,"5");
+        //设置音调
+        speechSynthesizer.setParameter(SpeechConstant.PITCH,"5");
+        //设置音量
+        speechSynthesizer.setParameter(SpeechConstant.VOLUME,"100");
+        }
+
+        else if(cc == 1){
+            // 设置发音人
+            speechSynthesizer.setParameter(SpeechConstant.VOICE_NAME, "aisjiuxu");
+            //设置语速
+            speechSynthesizer.setParameter(SpeechConstant.SPEED,"0");
+            //设置音调
+            speechSynthesizer.setParameter(SpeechConstant.PITCH,"0");
+            //设置音量
+            speechSynthesizer.setParameter(SpeechConstant.VOLUME,"100");
+        }
+
+        String sourceFilename =  System.currentTimeMillis()+".pcm";
+        System.out.println(sourceFilename);
         // 设置合成音频保存位置（可自定义保存位置），默认不保存
-        speechSynthesizer.synthesizeToUri("廖阿姨牛逼 ", "./tts_test.pcm",
+        speechSynthesizer.synthesizeToUri(text, path + sourceFilename,
                 synthesizeToUriListener);
+
+        return sourceFilename;
     }
 
     /**
+     *
      * 合成监听器
      */
-    SynthesizeToUriListener synthesizeToUriListener = new SynthesizeToUriListener() {
+    static SynthesizeToUriListener synthesizeToUriListener = new SynthesizeToUriListener() {
 
         public void onBufferProgress(int progress) {
             DebugLog.Log("*************合成进度*************" + progress);
@@ -36,7 +64,6 @@ public class VoiceTranslateUtil {
             } else
                 DebugLog.Log("*************" + error.getErrorCode()
                         + "*************");
-            waitupLoop();
         }
 
 
@@ -68,10 +95,5 @@ public class VoiceTranslateUtil {
             }//end of if tts buffer event
         }
 
-        private void waitupLoop() {
-            synchronized (this) {
-                VoiceTranslateUtil.this.notify();
-            }
-        }
     };
 }

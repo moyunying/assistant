@@ -7,17 +7,20 @@ import cn.moyunying.assistant.util.AssistantConstant;
 import cn.moyunying.assistant.util.AudioUtil;
 import cn.moyunying.assistant.util.FileUtil;
 import cn.moyunying.assistant.util.TranslateUtil;
+import cn.moyunying.assistant.util.VoiceTranslateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
 
 @Service
 public class TranslateService implements AssistantConstant {
+
+    private static final String path = "D:\\audio\\";
 
     @Autowired
     private UserService userService;
@@ -62,9 +65,14 @@ public class TranslateService implements AssistantConstant {
             dst = TranslateUtil.textTranslate(text, JP, ZH);
         }
 
+        String sourceFileName = VoiceTranslateUtil.Synthesize(dst, cc);
+        String targetFileName = FileUtil.pcmToMp3(sourceFileName);
+        File audio = new File(path, targetFileName);
+
         if (dst != null) {
             map.put("dst", dst);
             map.put("code", 0);
+            map.put("audio",audio);
             map.put("msg", "文本翻译成功！");
         } else {
             map.put("code", 1);
