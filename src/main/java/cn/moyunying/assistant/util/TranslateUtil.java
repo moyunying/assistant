@@ -43,8 +43,9 @@ public class TranslateUtil {
                 .build();
 
         OkHttpClient client = new OkHttpClient();
+        Response response = null;
         try {
-            Response response = client.newCall(request).execute();
+            response = client.newCall(request).execute();
             if (response.body() != null) {
                 Map<String, Object> map = new HashMap<>();
                 JSONObject data = JSON.parseObject(response.body().string()).getJSONObject("data");
@@ -57,6 +58,10 @@ public class TranslateUtil {
         } catch (IOException e) {
             e.printStackTrace();
             return null;
+        } finally {
+            if (response != null){
+                response.close();
+            }
         }
     }
 
@@ -78,8 +83,9 @@ public class TranslateUtil {
                 .build();
 
         OkHttpClient client = new OkHttpClient();
+        Response response = null;
         try {
-            Response response = client.newCall(request).execute();
+            response = client.newCall(request).execute();
             if (response.body() != null) {
                 Map<String, Object> map = new HashMap<>();
                 JSONArray transResult = JSON.parseObject(response.body().string()).getJSONArray("trans_result");
@@ -90,6 +96,10 @@ public class TranslateUtil {
         } catch (IOException e) {
             e.printStackTrace();
             return null;
+        } finally {
+            if (response != null){
+                response.close();
+            }
         }
     }
 }

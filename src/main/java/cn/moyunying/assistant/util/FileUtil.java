@@ -7,7 +7,7 @@ import java.io.File;
 
 public class FileUtil {
 
-    private static final String path = "D:\\Projects\\IdeaProjects\\assistant\\src\\main\\resources\\audio\\";
+    private static final String path = "D:\\audio\\";
 
     private static final String ffmpeg = "D:\\ffmpeg\\bin\\ffmpeg.exe";
 

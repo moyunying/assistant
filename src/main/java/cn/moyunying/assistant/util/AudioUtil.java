@@ -35,7 +35,7 @@ public class AudioUtil {
     private static final String ORIGIN = "http://" + HOST;
 
     // 音频文件夹路径
-    private static final String AUDIO_PATH = "D:\\Projects\\IdeaProjects\\assistant\\src\\main\\resources\\audio\\";
+    private static final String AUDIO_PATH = "D:\\audio\\";
 
     // 每次发送的数据大小 1280 字节
     private static final int CHUNCKED_SIZE = 1280;
