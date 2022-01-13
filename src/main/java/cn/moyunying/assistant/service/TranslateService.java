@@ -49,6 +49,12 @@ public class TranslateService implements AssistantConstant {
     public Map<String, Object> textTranslate(int cc, String text) {
         Map<String, Object> map = new HashMap<>();
 
+        if (text.isEmpty()) {
+            map.put("code", 1);
+            map.put("msg", "没有文本！");
+            return map;
+        }
+
         String dst;
         if (cc == 0) {
             dst = TranslateUtil.textTranslate(text, ZH, JP);
@@ -79,28 +85,27 @@ public class TranslateService implements AssistantConstant {
         }
 
         User user = userMapper.selectById(loginTicket.getUserId());
-        if (user.getType() != 1) {
+        if (user.getType() == 0) {
             map.put("code", 1);
-            map.put("msg", "不是会员无法使用此功能！");
+            map.put("msg", "普通用户无法使用此功能！");
             return map;
         }
 
         //保存文件到本地
-        String fileName = FileUtil.saveToLocal(audio);
+        String sourceFileName = FileUtil.saveToLocal(audio);
+        // mp3转pcm
+        String targetFileName = FileUtil.mp3ToPcm(sourceFileName);
 
-        String result = null;
+        Map<String, Object> result = null;
         if (cc == 0) {
-            result = AudioUtil.audioTranslate(fileName, CN, JA);
+            result = AudioUtil.audioTranslate(targetFileName, CN, JA);
         } else {
-            try {
-                result = AudioUtil.audioTranslate(fileName, JA, CN);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            result = AudioUtil.audioTranslate(targetFileName, JA, CN);
         }
 
         if (result != null) {
-            map.put("result", result);
+            map.put("dst", result.get("dst"));
+            map.put("src", result.get("src"));
             map.put("code", 0);
             map.put("msg", "语音翻译成功！");
         } else {

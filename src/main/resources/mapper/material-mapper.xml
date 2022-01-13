@@ -5,30 +5,27 @@
 <mapper namespace="cn.moyunying.assistant.dao.MaterialMapper">
 
     <sql id="selectFields">
-        id, title, content, create_time, keyword
+        id, title, content, picture_url, create_time
     </sql>
 
     <sql id="insertFields">
-        title, content, create_time, keyword
+        title, content, picture_url, create_time
     </sql>
 
     <insert id="insertMaterial" parameterType="Material" keyProperty="id">
         insert into material(<include refid="insertFields"></include>)
-        values(#{title}, #{content}, #{createTime}, #{keyword})
+        values(#{title}, #{content}, #{pictureUrl}, #{createTime})
     </insert>
 
-    <select id="selectTotalByKeyword" resultType="int">
-        select count(*)
+    <select id="selectMaterials" resultType="Material">
+        select *
         from material
-        where keyword = #{keyword}
     </select>
 
-    <select id="selectMaterialsByKeyword" resultType="Material">
+    <select id="selectMaterialById" resultType="Material">
         select <include refid="selectFields"></include>
         from material
-        where keyword = #{keyword}
-        order by create_time desc
-        limit #{offset}, #{limit}
+        where id = #{id}
     </select>
 
 </mapper>

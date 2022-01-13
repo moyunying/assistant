@@ -86,12 +86,6 @@
             <artifactId>istack-commons-runtime</artifactId>
             <version>4.0.1</version>
         </dependency>
-
-		<dependency>
-			<groupId>com.iflytek.cloud.speech</groupId>
-			<artifactId>Msc</artifactId>
-			<version>1.0</version>
-		</dependency>
     </dependencies>
 
 	<build>

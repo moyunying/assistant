@@ -34,8 +34,9 @@ public class UploadUtil {
                 .build();
 
         OkHttpClient client = new OkHttpClient();
+        Response response = null;
         try {
-            Response response = client.newCall(request).execute();
+            response = client.newCall(request).execute();
             if (response.message().equals("OK")) {
                 return domain + key;
             } else {
@@ -44,6 +45,10 @@ public class UploadUtil {
         } catch (IOException e) {
             e.printStackTrace();
             return null;
+        } finally {
+            if (response != null){
+                response.close();
+            }
         }
     }
 }
