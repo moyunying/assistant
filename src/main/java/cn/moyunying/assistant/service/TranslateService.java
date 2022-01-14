@@ -3,19 +3,14 @@ package cn.moyunying.assistant.service;
 import cn.moyunying.assistant.dao.UserMapper;
 import cn.moyunying.assistant.entity.LoginTicket;
 import cn.moyunying.assistant.entity.User;
-import cn.moyunying.assistant.util.AssistantConstant;
-import cn.moyunying.assistant.util.AudioUtil;
-import cn.moyunying.assistant.util.FileUtil;
-import cn.moyunying.assistant.util.TranslateUtil;
-import cn.moyunying.assistant.util.VoiceTranslateUtil;
+import cn.moyunying.assistant.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.*;
+
+
 
 @Service
 public class TranslateService implements AssistantConstant {
@@ -64,17 +59,16 @@ public class TranslateService implements AssistantConstant {
         } else {
             dst = TranslateUtil.textTranslate(text, JP, ZH);
         }
-
         String sourceFileName = VoiceTranslateUtil.Synthesize(dst, cc);
         String targetFileName = FileUtil.pcmToMp3(sourceFileName);
-        File audio = new File(path, targetFileName);
+        System.out.println(targetFileName);
 
         if (dst != null) {
             map.put("dst", dst);
             map.put("code", 0);
-            map.put("audio",audio);
-            map.put("msg", "文本翻译成功！");
-        } else {
+            //map.put("audio",audio);
+            map.put("msg1", "文本翻译成功！");
+        }else {
             map.put("code", 1);
             map.put("msg", "文本翻译失败！");
         }

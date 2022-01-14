@@ -44,6 +44,7 @@ public class FileUtil {
         try {
             run = Runtime.getRuntime();
             Process p = run.exec(cmd);
+            p.exitValue();
 
             //释放进程
             p.getOutputStream().close();
@@ -67,19 +68,36 @@ public class FileUtil {
         String targetFileName = sourceFileName.substring(0, sourceFileName.lastIndexOf(".")) + ".mp3";
         String sourcePath = path + sourceFileName;
         String targetPath = path + targetFileName;
-        String cmd = ffmpeg + " -y -f s16be -ac 2 -ar 16000 -acodec pcm_s16le -i " + sourcePath + " "+ targetPath;
+
+        String cmd = ffmpeg + "  -y -f s16be -ac 2 -ar 16000 -acodec pcm_s16le -i " + sourcePath + " " + targetPath;
 
         Runtime run = null;
         System.out.println(run);
         try {
+            int i = 1;
             run = Runtime.getRuntime();
-            Process p = run.exec(cmd);
+            do {
+                File file = new File(sourcePath);
+                System.out.println(file+"1");
+                if(file.exists()){
+                    System.out.println(file);
+                    Process p = run.exec(cmd);
 
-            //释放进程
-            p.getOutputStream().close();
-            p.getInputStream().close();
-            p.getErrorStream().close();
-            p.waitFor();
+                    //释放进程
+                    p.getOutputStream().close();
+                    p.getInputStream().close();
+                    p.getErrorStream().close();
+                    p.waitFor();
+                    break;}
+                else{
+                    try {
+                        Thread.sleep(i*1000); //每次循环多等待一秒
+                    } catch(InterruptedException ex) {
+                        Thread.currentThread().interrupt();
+                    }
+                }
+                i++;
+            }while (i<6);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -88,6 +106,7 @@ public class FileUtil {
                 run.freeMemory();
             }
         }
+        System.out.println("语音转换执行完毕！");
 
         return targetFileName;
     }

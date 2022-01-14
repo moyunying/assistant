@@ -1,6 +1,8 @@
 package cn.moyunying.assistant.util;
 
 import java.util.ArrayList;
+
+import cn.moyunying.assistant.util.DebugLog;
 import com.iflytek.cloud.speech.*;
 
 public class VoiceTranslateUtil {
@@ -16,14 +18,14 @@ public class VoiceTranslateUtil {
                 .createSynthesizer();
 
         if(cc == 0){
-        // 设置发音人
-        speechSynthesizer.setParameter(SpeechConstant.VOICE_NAME, "x2_zhongcun");
-        //设置语速
-        speechSynthesizer.setParameter(SpeechConstant.SPEED,"5");
-        //设置音调
-        speechSynthesizer.setParameter(SpeechConstant.PITCH,"5");
-        //设置音量
-        speechSynthesizer.setParameter(SpeechConstant.VOLUME,"100");
+            // 设置发音人
+            speechSynthesizer.setParameter(SpeechConstant.VOICE_NAME, "x2_zhongcun");
+            //设置语速
+            speechSynthesizer.setParameter(SpeechConstant.SPEED,"5");
+            //设置音调
+            speechSynthesizer.setParameter(SpeechConstant.PITCH,"5");
+            //设置音量
+            speechSynthesizer.setParameter(SpeechConstant.VOLUME,"100");
         }
 
         else if(cc == 1){
@@ -44,6 +46,7 @@ public class VoiceTranslateUtil {
                 synthesizeToUriListener);
 
         return sourceFilename;
+
     }
 
     /**
@@ -54,7 +57,6 @@ public class VoiceTranslateUtil {
 
         public void onBufferProgress(int progress) {
             DebugLog.Log("*************合成进度*************" + progress);
-
         }
 
         public void onSynthesizeCompleted(String uri, SpeechError error) {
