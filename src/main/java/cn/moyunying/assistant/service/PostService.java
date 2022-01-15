@@ -47,7 +47,7 @@ public class PostService {
     public Map<String, Object> getPosts(int page) {
         Map<String, Object> map = new HashMap<>();
 
-        int limit = 10;
+        int limit = 5;
         int offset = (page - 1) * limit;
         List<Post> list = postMapper.selectPosts(offset, limit);
 
@@ -80,7 +80,7 @@ public class PostService {
     public Map<String, Object> getUserPosts(int userId, int page) {
         Map<String, Object> map = new HashMap<>();
 
-        int limit = 10;
+        int limit = 5;
         int offset = (page - 1) * limit;
         List<Post> list = postMapper.selectPostsByUserId(userId, offset, limit);
 
