@@ -44,7 +44,8 @@ public class FileUtil {
         try {
             run = Runtime.getRuntime();
             Process p = run.exec(cmd);
-            p.exitValue();
+//            Thread.sleep(1000);
+//            p.exitValue();
 
             //释放进程
             p.getOutputStream().close();

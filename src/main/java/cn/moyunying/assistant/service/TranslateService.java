@@ -10,8 +10,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
 
-
-
 @Service
 public class TranslateService implements AssistantConstant {
 
@@ -59,14 +57,10 @@ public class TranslateService implements AssistantConstant {
         } else {
             dst = TranslateUtil.textTranslate(text, JP, ZH);
         }
-        String sourceFileName = VoiceTranslateUtil.Synthesize(dst, cc);
-        String targetFileName = FileUtil.pcmToMp3(sourceFileName);
-        System.out.println(targetFileName);
 
         if (dst != null) {
             map.put("dst", dst);
             map.put("code", 0);
-            map.put("fileName", targetFileName);
             map.put("msg1", "文本翻译成功！");
         }else {
             map.put("code", 1);
@@ -105,9 +99,13 @@ public class TranslateService implements AssistantConstant {
             result = AudioUtil.audioTranslate(targetFileName, JA, CN);
         }
 
+        sourceFileName = VoiceTranslateUtil.Synthesize((String) result.get("dst"), cc);
+        targetFileName = FileUtil.pcmToMp3(sourceFileName);
+
         if (result != null) {
             map.put("dst", result.get("dst"));
             map.put("src", result.get("src"));
+            map.put("fileName", targetFileName);
             map.put("code", 0);
             map.put("msg", "语音翻译成功！");
         } else {
