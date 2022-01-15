@@ -97,7 +97,7 @@ public class FileUtil {
                     }
                 }
                 i++;
-            }while (i<6);
+            }while (i<=6);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

@@ -66,7 +66,7 @@ public class TranslateService implements AssistantConstant {
         if (dst != null) {
             map.put("dst", dst);
             map.put("code", 0);
-            //map.put("audio",audio);
+            map.put("fileName", targetFileName);
             map.put("msg1", "文本翻译成功！");
         }else {
             map.put("code", 1);
